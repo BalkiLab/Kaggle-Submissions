@@ -52,3 +52,9 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# Data, Benchmarks, Submissions and Python
+Benchmarks/
+Data/
+Python/
+Submissions/
+
