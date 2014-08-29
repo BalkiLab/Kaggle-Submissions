@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn import svm
 from sklearn.cross_validation import KFold,StratifiedKFold
 from sklearn.metrics import log_loss
 from sklearn.linear_model import LogisticRegression
@@ -77,6 +78,14 @@ def testLogisticRegression(y, X, Xtest):
     predicted_probs.to_csv('Submissions/BiologicalResponse/lrsubmission.csv',header = True,index = True,float_format = "%f");
 
 
+def testSVM(y,X,Xtest):
+    svc = svm.SVC(probability=True)
+    results = evaluateModel(y, X, 5, svc)
+    print "Results: " + str( np.array(results).mean() )
+    svc.fit(X,y);
+    predicted_probs=makeSubmission(svc, Xtest)
+    predicted_probs.to_csv('Submissions/BiologicalResponse/svmsubmission.csv',header = True,index = True,float_format = "%f");    
+
 def testBlendedModel(y, X, Xtest):
     Xb,ys,Xbtest = getBlendedModelFeatures(y, X, Xtest, 10)
     lrModel = LogisticRegression()
@@ -88,9 +97,10 @@ def testBlendedModel(y, X, Xtest):
     
 def main():
     y,X,Xtest = readData()
-    testRandomForestModel(y, X, Xtest)
-    testLogisticRegression(y, X, Xtest)
-    testBlendedModel(y, X, Xtest)
+    #testRandomForestModel(y, X, Xtest)
+    #testLogisticRegression(y, X, Xtest)
+    #testBlendedModel(y, X, Xtest)
+    testSVM(y, X, Xtest)
     
 if __name__ == "__main__":
     np.random.seed(0) # seed to shuffle the train set
